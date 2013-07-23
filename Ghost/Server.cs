@@ -38,11 +38,12 @@ namespace Ghost {
             TcpClient tcpClient = (TcpClient)client;
             NetworkStream clientStream = tcpClient.GetStream();
 
-            byte[] message = new byte[4096];
+            byte[] message = new byte[512];
             int bytesRead;
 
             while (true) {
                 Console.WriteLine("Waiting");
+                
                 bytesRead = 0;
                 try {
                     // blocks until a client sends a message
@@ -58,9 +59,9 @@ namespace Ghost {
 
                 // message has successfully been received
                 UTF8Encoding encoder = new UTF8Encoding();
-                string msg = encoder.GetString(message);
-                Console.WriteLine("Received: " + bytesRead + " bytes," +
-                    "with MD5 " + MD5Hash(msg) + " message received:\n\n" + msg);
+                string msg = encoder.GetString(message).Trim();
+                Console.WriteLine("Received: " + bytesRead + " bytes, " +
+                    " with MD5 " + MD5Hash(msg));
                 string reply = QBConnect(msg);
 
                 // send a message
@@ -69,6 +70,7 @@ namespace Ghost {
 
                 clientStream.Write(buffer, 0, buffer.Length);
                 clientStream.Flush();
+                Array.Clear(message, 0, message.Length);
                 Console.Write(" Done!\n  Sent " + buffer.Length + " bytes.\n\n");
             }
 
