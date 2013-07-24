@@ -38,7 +38,7 @@ namespace Ghost {
             TcpClient tcpClient = (TcpClient)client;
             NetworkStream clientStream = tcpClient.GetStream();
 
-            byte[] message = new byte[512];
+            byte[] message = new byte[4096];
             int bytesRead;
 
             while (true) {
@@ -47,7 +47,7 @@ namespace Ghost {
                 bytesRead = 0;
                 try {
                     // blocks until a client sends a message
-                    bytesRead = clientStream.Read(message, 0, 512);
+                    bytesRead = clientStream.Read(message, 0, 4096);
                 } catch {
                     // a socket error has occured
                     break;
@@ -59,21 +59,22 @@ namespace Ghost {
 
                 // message has successfully been received
                 UTF8Encoding encoder = new UTF8Encoding();
-                string msg = encoder.GetString(message).Trim();
-                Console.WriteLine("Received: " + bytesRead + " bytes, " +
-                    " with MD5 " + MD5Hash(msg));
+                string msg = encoder.GetString(message);
+                Console.WriteLine("Received: " + bytesRead + " bytes, with MD5: " + MD5Hash(msg));
                 string reply = QBConnect(msg);
 
                 // send a message
                 Console.Write("Replying...");
-                byte[] buffer = encoder.GetBytes("\n\n" + reply + "\n");
-
+                byte[] buffer = encoder.GetBytes(reply);
                 clientStream.Write(buffer, 0, buffer.Length);
+                Console.Write(" Done!\n  Sent " + buffer.Length + " bytes.\n\n");
+                
+                // cleaning up...
                 clientStream.Flush();
                 Array.Clear(message, 0, message.Length);
-                Console.Write(" Done!\n  Sent " + buffer.Length + " bytes.\n\n");
             }
 
+            Console.WriteLine("Closing...");
             tcpClient.Close();
         }
 
@@ -88,7 +89,7 @@ namespace Ghost {
                 ticket = rp.BeginSession("", QBFileMode.qbFileOpenDoNotCare);
                 response = rp.ProcessRequest(ticket, data);
             } catch (System.Runtime.InteropServices.COMException ex) {
-                return "COM Error Description = " + ex.Message;
+                return "COM Error Description = " + ex.Message + "\n";
             } finally {
                 if (ticket != null) {
                     rp.EndSession(ticket);
@@ -100,6 +101,9 @@ namespace Ghost {
             return response;
         }
 
+        // this unction dosn't exsist in the std lib?
+        // not even in a crypto lib?
+        // ffs dudes!!!  come on!!!!!
         static string MD5Hash(string input) {
             // step 1, calculate MD5 hash from input
             System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
