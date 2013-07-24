@@ -62,6 +62,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="license.md" />
     <None Include="readme.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
