@@ -3,7 +3,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
-using QBXMLRP2Lib;
+using Interop.QBXMLRP2;
 
 // code mostly stolen from:
 // http://tech.pro/tutorial/704/csharp-tutorial-simple-threaded-tcp-server

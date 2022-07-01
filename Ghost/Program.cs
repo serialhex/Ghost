@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using QBXMLRP2Lib;
+using Interop.QBXMLRP2;
 
 namespace Ghost {
     class Program {

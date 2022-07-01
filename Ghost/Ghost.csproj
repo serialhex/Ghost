@@ -10,8 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ghost</RootNamespace>
     <AssemblyName>Ghost</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <!-- <TargetFrameworkProfile>Client</TargetFrameworkProfile> -->
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -51,7 +51,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="QBXMLRP2Lib">
+    <!-- <COMReference Include="QBXMLRP2Lib">
       <Guid>{4351618F-9059-4A79-B638-DCB8B97B3262}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
@@ -59,7 +59,11 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    </COMReference> -->
+    <Reference Include="Interop.QBXMLRP2">
+      <Name>Interop.QBXMLRP2</Name>
+      <HintPath>C:\Program Files\Common Files\Intuit\QuickBooks\Interop.QBXMLRP2.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="license.md" />
