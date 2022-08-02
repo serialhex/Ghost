@@ -33,6 +33,22 @@ namespace Ghost {
             }
         }
 
+        private byte[] RemoveNewlines(byte[] buffer) {
+            byte[] result = new byte[buffer.Length];
+            int idx = 0;
+            int jdx = 0;
+            for (; idx < buffer.Length; idx++) {
+                if (buffer[idx] == '\n') {
+                    //skip
+                } else {
+                    result[jdx] = buffer[idx];
+                    jdx++;
+                }
+            }
+
+            return result;
+        }
+
         private void HandleClientComm(object client) {
             Console.WriteLine("Client Attached.");
             TcpClient tcpClient = (TcpClient)client;
@@ -43,7 +59,7 @@ namespace Ghost {
 
             while (true) {
                 Console.WriteLine("Waiting");
-                
+
                 bytesRead = 0;
                 try {
                     // blocks until a client sends a message
@@ -66,9 +82,12 @@ namespace Ghost {
                 // send a message
                 Console.Write("Replying...");
                 byte[] buffer = encoder.GetBytes(reply);
+                buffer = RemoveNewlines(buffer);
+
                 clientStream.Write(buffer, 0, buffer.Length);
-                Console.Write(" Done!\n  Sent " + buffer.Length + " bytes.\n\n");
-                
+                clientStream.WriteByte((byte)'\n');
+                Console.Write(" Done!\n  Sent " + (buffer.Length + 1) + " bytes.\n\n");
+
                 // cleaning up...
                 clientStream.Flush();
                 Array.Clear(message, 0, message.Length);
